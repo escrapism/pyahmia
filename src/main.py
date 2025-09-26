@@ -76,4 +76,5 @@ class Ahmia:
         """
 
         response: Response = self.session.get(url=url)
-        return BeautifulSoup(response.content, "html.parser")
+        soup: BeautifulSoup = BeautifulSoup(response.content, "html.parser")
+        return soup
