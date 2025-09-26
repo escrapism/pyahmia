@@ -1,24 +1,19 @@
 import typing as t
+from pathlib import Path
 from types import SimpleNamespace
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup, ResultSet
 from requests import Response
 from requests_tor import RequestsTor
+from rich import print
+from update_checker import UpdateChecker, UpdateResult
 
 
 class Ahmia:
 
     def __init__(self, user_agent: str, use_tor: bool = False):
-        """
-        Initialise an Ahmia search client.
-
-        :param user_agent: The User-Agent string that will be sent with all requests.
-        :param use_tor: If True, requests will be routed through the Tor network using
-                        the Ahmia .onion hidden service. If False, the clearnet version
-                        of Ahmia (https://ahmia.fi) will be used instead.
-        """
-
         self.user_agent = user_agent
         self.use_tor = use_tor
 
@@ -31,20 +26,39 @@ class Ahmia:
             self._search_url: str = "https://ahmia.fi/search/?q=%s"
             self.session = requests.Session()
 
-        self.session.headers.update({"User-Agent": self.user_agent})
+    @staticmethod
+    def check_updates():
+        from . import __pkg__, __version__
+
+        checker = UpdateChecker()
+        check: t.Union[UpdateResult, None] = checker.check(
+            package_name=__pkg__, package_version=__version__
+        )
+        if check:
+            print(check)
+
+    @staticmethod
+    def export_csv(
+        results: t.Iterable[SimpleNamespace], path: str = "ahmia_results"
+    ) -> str:
+        results_list = list(results)
+
+        if not all(isinstance(item, SimpleNamespace) for item in results_list):
+            raise TypeError(
+                "export_csv expects an iterable of SimpleNamespace objects (e.g., result of Ahmia.search())"
+            )
+
+        df = pd.DataFrame([item.__dict__ for item in results_list])
+        out: Path = Path().home() / "pyahmia" / f"{path}.csv"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(out, index=False, encoding="utf-8")
+
+        return str(out)
 
     def search(
         self, query: str, limit: int = 20
     ) -> t.Generator[SimpleNamespace, None, None]:
-        """
-        Search Ahmia for hidden services matching the given query.
-
-        :param query: The search term to look up on Ahmia.
-        :param limit: Maximum number of results to yield. Defaults to 20.
-        :return: A generator yielding SimpleNamespace objects, each representing a search result.
-        """
-
-        soup: BeautifulSoup = self._get_source(url=self._search_url % query)
+        soup: BeautifulSoup = self._get_page_source(url=self._search_url % query)
         items: ResultSet = soup.find_all("li", {"class": "result"})
 
         for item in items[:limit]:
@@ -66,15 +80,9 @@ class Ahmia:
                 }
             )
 
-    def _get_source(self, url: str) -> BeautifulSoup:
-        """
-        Fetch the given URL using the configured session and parse the response.
-
-        :param url: The full URL to request.
-        :return: A BeautifulSoup object containing the parsed HTML content
-                 of the response.
-        """
-
-        response: Response = self.session.get(url=url)
+    def _get_page_source(self, url: str) -> BeautifulSoup:
+        response: Response = self.session.get(
+            url=url, headers={"User-Agent": self.user_agent}
+        )
         soup: BeautifulSoup = BeautifulSoup(response.content, "html.parser")
         return soup
