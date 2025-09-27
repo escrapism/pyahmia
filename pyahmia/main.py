@@ -59,12 +59,12 @@ class Ahmia:
 
         return str(out)
 
-    def search(
-        self, query: str, limit: int = 20
-    ) -> t.Generator[SimpleNamespace, None, None]:
+    def search(self, query: str, limit: int = 20) -> tuple[list[SimpleNamespace], int]:
         soup: BeautifulSoup = self._get_page_source(url=self._search_url % query)
         items: ResultSet = soup.find_all("li", {"class": "result"})
+        total_count = len(items)
 
+        results: list[SimpleNamespace] = []
         for item in items[:limit]:
             last_seen_tag = item.find("span", {"class": "lastSeen"})
             last_seen_text = (
@@ -74,15 +74,19 @@ class Ahmia:
                 last_seen_tag.get("data-timestamp") if last_seen_tag else "NaN"
             )
 
-            yield SimpleNamespace(
-                **{
-                    "title": " ".join(item.find("h4").text.split()),
-                    "about": " ".join(item.find("p").text.split()),
-                    "url": " ".join(item.find("cite").text.split()),
-                    "last_seen_rel": last_seen_text.replace("\xa0", " "),
-                    "last_seen_ts": last_seen_timestamp,
-                }
+            results.append(
+                SimpleNamespace(
+                    **{
+                        "title": " ".join(item.find("h4").text.split()),
+                        "about": " ".join(item.find("p").text.split()),
+                        "url": " ".join(item.find("cite").text.split()),
+                        "last_seen_rel": last_seen_text.replace("\xa0", " "),
+                        "last_seen_ts": last_seen_timestamp,
+                    }
+                )
             )
+
+        return results, total_count
 
     def _get_page_source(self, url: str) -> BeautifulSoup:
         response: Response = self.session.get(

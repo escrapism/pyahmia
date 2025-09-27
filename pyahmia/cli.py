@@ -36,7 +36,7 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
     )
 
     table = Table(
-        box=box.MINIMAL,
+        box=box.SIMPLE,
         highlight=True,
         header_style="bold",
         border_style="dim",
@@ -68,10 +68,10 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
                 f"[bold]Searching for [green]'{query}'[/green]. Please wait[yellow]...[/bold][/yellow]"
             )
 
-            results = list(client.search(query=query, limit=limit))
+            results, total_results = client.search(query=query, limit=limit)
             results_length = len(results)
 
-            if results:
+            if total_results > 0:
                 for index, result in enumerate(results, start=1):
                     table.add_row(
                         str(index),
@@ -85,6 +85,9 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
                     outfile: str = client.export_csv(results=results, path=export)
                     console.log(f"{results_length} results exported to {outfile}")
 
+                console.log(
+                    f"[bold][green]✔[/green] Showing {results_length} of {total_results} results for '{query}'[/bold]"
+                )
                 console.print(table)
             else:
                 console.log(
