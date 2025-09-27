@@ -1,8 +1,8 @@
+import csv
 import typing as t
 from pathlib import Path
 from types import SimpleNamespace
 
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup, ResultSet
 from requests import Response
@@ -40,9 +40,7 @@ class Ahmia:
             console.print(check)
 
     @staticmethod
-    def export_csv(
-        results: t.Iterable[SimpleNamespace], path: str = "ahmia_results"
-    ) -> str:
+    def export_csv(results: t.Iterable[SimpleNamespace], path: str) -> str:
         results_list = list(results)
 
         if not all(isinstance(item, SimpleNamespace) for item in results_list):
@@ -50,10 +48,18 @@ class Ahmia:
                 "export_csv expects an iterable of SimpleNamespace objects (e.g., result of Ahmia.search())"
             )
 
-        df = pd.DataFrame([item.__dict__ for item in results_list])
+        dict_rows = [item.__dict__ for item in results_list]
+
+        if not dict_rows:
+            raise ValueError("No results to export")
+
         out: Path = Path().home() / "pyahmia" / f"{path}.csv"
         out.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(out, index=False, encoding="utf-8")
+
+        with out.open(mode="w", encoding="utf-8", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=dict_rows[0].keys())
+            writer.writeheader()
+            writer.writerows(dict_rows)
 
         return str(out)
 

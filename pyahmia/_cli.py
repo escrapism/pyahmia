@@ -16,17 +16,20 @@ from ._api import Ahmia, console
 @click.command()
 @click.argument("query", type=str)
 @click.option(
+    "-e",
     "--export",
+    is_flag=True,
     help="Export the output to a given filename",
 )
 @click.option(
+    "-l",
     "--limit",
     default=20,
     show_default=True,
     help="Maximum number of results to show",
 )
 @click.option("--use-tor", is_flag=True, help="Connect to the Tor network")
-def cli(query: str, limit: int, use_tor: bool, export: str):
+def cli(query: str, limit: int, use_tor: bool, export: bool):
     """
     Search Ahmia for hidden services matching QUERY.
     """
@@ -94,7 +97,7 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
                     )
 
                 if export:
-                    outfile: str = client.export_csv(results=results, path=export)
+                    outfile: str = client.export_csv(results=results, path=query)
                     console.log(f"{results_length} results exported to {outfile}")
 
             else:
