@@ -22,7 +22,7 @@ logging.basicConfig(
     format="%(message)s",
     handlers=[RichHandler(markup=True, show_level=False, show_time=False)],
 )
-log = logging.getLogger(__name__)
+log: logging.Logger = logging.getLogger(__name__)
 
 
 class Ahmia:
