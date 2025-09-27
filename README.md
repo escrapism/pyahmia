@@ -1,2 +1,1 @@
-# pyahmia
-Python wrapper and CLI utility  for Ahmia.fi
+**pyahmia** uses Ahmia.fi to search for hidden services on the Tor network that match with a specified query.

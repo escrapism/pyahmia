@@ -10,8 +10,6 @@ from requests_tor import RequestsTor
 from rich.console import Console
 from update_checker import UpdateChecker, UpdateResult
 
-__all__ = ["Ahmia", "console"]
-
 console = Console(log_time=False)
 
 

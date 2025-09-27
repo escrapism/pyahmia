@@ -27,8 +27,8 @@ BeautifulSoup4 = "^4.13.4"
 rich-click = "^1.8.9"
 
 [tool.poetry.scripts]
-ahmia = "pyahmia.cli:cli"
-pyahmia = "pyahmia.cli:cli"
+ahmia = "pyahmia._cli:cli"
+pyahmia = "pyahmia._cli:cli"
 
 [build-system]
 requires = ["poetry-core>=2.2.1,<3.0.0"]

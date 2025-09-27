@@ -3,11 +3,14 @@ from contextlib import suppress
 
 import rich_click as click
 from rich import box
+from rich.console import Group
+from rich.panel import Panel
+from rich.rule import Rule
 from rich.status import Status
 from rich.table import Table
 
 from . import __pkg__, __version__
-from .main import Ahmia, console
+from ._api import Ahmia, console
 
 
 @click.command()
@@ -58,37 +61,42 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
 
             if use_tor:
                 console.log(
-                    "[bold green]✔ Routing traffic through Tor[/bold green]",
+                    "[bold][#c7ff70]✔ Routing traffic through Tor[/][/bold]",
                 )
             else:
                 console.log(
                     "[bold yellow]✘ Routing traffic through the clearnet[/bold yellow]"
                 )
             status.update(
-                f"[bold]Searching for [green]'{query}'[/green]. Please wait[yellow]...[/bold][/yellow]"
+                f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
             )
 
             results, total_results = client.search(query=query, limit=limit)
             results_length = len(results)
 
             if total_results > 0:
+                console.log(
+                    f"[bold][#c7ff70]✔[/] Showing {results_length} of {total_results} results for [#c7ff70]{query}[/][/bold]"
+                )
                 for index, result in enumerate(results, start=1):
-                    table.add_row(
-                        str(index),
-                        result.title,
+                    content_items = [
+                        f"[bold][#c7ff70]{result.title}[/][/bold]",
+                        Rule(style="#444444"),
                         result.about,
-                        result.url,
-                        result.last_seen_rel,
+                        f"[blue][link=http://{result.url}]{result.url}[/link][/blue] — [bold]{result.last_seen_rel}[/]",
+                    ]
+                    console.print(
+                        Panel(
+                            Group(*content_items),
+                            highlight=True,
+                            border_style="dim",
+                        )
                     )
 
                 if export:
                     outfile: str = client.export_csv(results=results, path=export)
                     console.log(f"{results_length} results exported to {outfile}")
 
-                console.log(
-                    f"[bold][green]✔[/green] Showing {results_length} of {total_results} results for '{query}'[/bold]"
-                )
-                console.print(table)
             else:
                 console.log(
                     f"[bold][yellow]✘[/yellow]No results found for {query}.[/bold]"
@@ -98,7 +106,7 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
         console.log("\n[bold][red]✘[/red] User interruption detected[/bold]")
 
     except Exception as e:
-        console.log(f"[bold] An error occurred:  [red]{e}[/red][/bold]")
+        console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
     finally:
         elapsed: float = time.time() - now
-        console.log(f"[bold][green]✔[/green] Finished in {elapsed:.2f} seconds.[/bold]")
+        console.log(f"[bold][#c7ff70]✔[/] Finished in {elapsed:.2f} seconds.[/bold]")
