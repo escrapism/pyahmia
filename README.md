@@ -2,32 +2,14 @@
 that match with a specified query, it works as a command-line interface tool and provides an easier way to export output
 to a csv file.
 
+![example](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/example.gif)
+
 ## Features
 
 - Search Ahmia.fi from the command line
 - Export results to CSV
 - Route requests through Tor
 - Limit or expand result count
-
-## Example output
-
-```
-✔ Routing traffic through Tor                                                       _cli.py:63
-✔ Showing 20 of 1004 results for osint                                              _cli.py:78
-╭────────────────────────────────────────────────────────────────────────────────────────────╮
-│ OSINT | Kikuri Knowledge Base                                                              │
-│ ────────────────────────────────────────────────────────────────────────────────────────── │
-│ No description provided                                                                    │
-│ kikurizsbpb7ar4ozrzogt6nre3j7s7mccqwxeg3jvppyik2aa475lqd.onion — 3 weeks, 1 day            │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
-╭────────────────────────────────────────────────────────────────────────────────────────────╮
-│ OSINT - #1 Mobile Hacker For Hire                                                          │
-│ ────────────────────────────────────────────────────────────────────────────────────────── │
-│ No description provided                                                                    │
-│ torzcd47rw4qh36g4yqxvv2tmifgmu6jjalkyqz4e4lzzwtfdfc7qaqd.onion — 3 weeks                   │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
-...
-```
 
 ## Installation
 
