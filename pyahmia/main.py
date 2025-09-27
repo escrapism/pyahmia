@@ -1,3 +1,4 @@
+import logging
 import typing as t
 from pathlib import Path
 from types import SimpleNamespace
@@ -7,8 +8,21 @@ import requests
 from bs4 import BeautifulSoup, ResultSet
 from requests import Response
 from requests_tor import RequestsTor
-from rich import print
+from rich.console import Console
+from rich.logging import RichHandler
 from update_checker import UpdateChecker, UpdateResult
+
+__all__ = ["Ahmia", "console"]
+
+console = Console()
+
+
+logging.basicConfig(
+    level="INFO",
+    format="%(message)s",
+    handlers=[RichHandler(markup=True, show_level=False, show_time=False)],
+)
+log = logging.getLogger(__name__)
 
 
 class Ahmia:
@@ -35,7 +49,7 @@ class Ahmia:
             package_name=__pkg__, package_version=__version__
         )
         if check:
-            print(check)
+            console.print(check)
 
     @staticmethod
     def export_csv(

@@ -1,10 +1,12 @@
+import time
 from contextlib import suppress
 
 import rich_click as click
-from rich import print, box
+from rich import box
 from rich.table import Table
 
-from . import Ahmia, __pkg__, __version__
+from . import __pkg__, __version__
+from .main import Ahmia, console, log
 
 
 @click.command()
@@ -24,7 +26,13 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
     """
     Search Ahmia for hidden services matching QUERY.
     """
-    client = Ahmia(user_agent=f"{__pkg__}-cli/{__version__}", use_tor=use_tor)
+
+    console.set_window_title(f"{__pkg__}, {__version__}")
+
+    client = Ahmia(
+        user_agent=f"{__pkg__}-cli/{__version__}; +https://pypi.org/project/{__pkg__}",
+        use_tor=use_tor,
+    )
 
     table = Table(
         box=box.MINIMAL,
@@ -33,20 +41,23 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
         border_style="dim",
     )
     table.add_column("#", style="bold")
-    table.add_column("Title")
-    table.add_column("About")
-    table.add_column("Onion URL", style="blue", no_wrap=True)
-    table.add_column("Last Seen")
+    table.add_column("title")
+    table.add_column("about")
+    table.add_column("url", style="blue", no_wrap=True)
+    table.add_column("last seen")
 
+    now: float = time.time()
     try:
         with suppress(Exception):
             client.check_updates()
 
         if use_tor:
-            print("[bold green]Routing requests through Tor[/bold green]")
+            log.info("[bold green]Routing traffic through Tor[/bold green]")
         else:
-            print("[bold yellow]Not routing requests through Tor[/bold yellow]")
-        print(f"[bold]Searching for '{query}'. Please wait[/]...")
+            log.warning(
+                "[bold yellow]Routing traffic through the clearnet[/bold yellow]"
+            )
+        log.info(f"[bold]Searching for '{query}'. Please wait[/]...")
         results = list(client.search(query=query, limit=limit))
         results_length = len(results)
 
@@ -62,12 +73,17 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
 
             if export:
                 outfile: str = client.export_csv(results=results, path=export)
-                print(f"{results_length} results exported to {outfile}")
+                log.info(f"{results_length} results exported to {outfile}")
 
-            print(table)
+            console.print(table)
+        else:
+            log.warning(f"[bold]No results found for {query}.[/bold]")
 
     except KeyboardInterrupt:
-        print("\n[bold yellow]User interruption detected[/bold yellow]")
+        log.warning("\n[bold]User interruption detected[/bold]")
 
     except Exception as e:
-        print(f"[bold red]{e}[/bold red]")
+        console.log(f"[bold red]{e}[/bold red]")
+    finally:
+        elapsed: float = time.time() - now
+        log.info(f"[bold]Finished in {elapsed:.2f} seconds.[/]")
