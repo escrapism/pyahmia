@@ -3,10 +3,11 @@ from contextlib import suppress
 
 import rich_click as click
 from rich import box
+from rich.status import Status
 from rich.table import Table
 
 from . import __pkg__, __version__
-from .main import Ahmia, console, log
+from .main import Ahmia, console
 
 
 @click.command()
@@ -48,42 +49,53 @@ def cli(query: str, limit: int, use_tor: bool, export: str):
 
     now: float = time.time()
     try:
-        with suppress(Exception):
-            client.check_updates()
 
-        if use_tor:
-            log.info("[bold green]Routing traffic through Tor[/bold green]")
-        else:
-            log.warning(
-                "[bold yellow]Routing traffic through the clearnet[/bold yellow]"
+        with Status(
+            "[bold]Checking for update[yellow]...[/bold][/yellow]", console=console
+        ) as status:
+            with suppress(Exception):
+                client.check_updates()
+
+            if use_tor:
+                console.log(
+                    "[bold green]✔ Routing traffic through Tor[/bold green]",
+                )
+            else:
+                console.log(
+                    "[bold yellow]✘ Routing traffic through the clearnet[/bold yellow]"
+                )
+            status.update(
+                f"[bold]Searching for [green]'{query}'[/green]. Please wait[yellow]...[/bold][/yellow]"
             )
-        log.info(f"[bold]Searching for '{query}'. Please wait[/]...")
-        results = list(client.search(query=query, limit=limit))
-        results_length = len(results)
 
-        if results:
-            for index, result in enumerate(results, start=1):
-                table.add_row(
-                    str(index),
-                    result.title,
-                    result.about,
-                    result.url,
-                    result.last_seen_rel,
+            results = list(client.search(query=query, limit=limit))
+            results_length = len(results)
+
+            if results:
+                for index, result in enumerate(results, start=1):
+                    table.add_row(
+                        str(index),
+                        result.title,
+                        result.about,
+                        result.url,
+                        result.last_seen_rel,
+                    )
+
+                if export:
+                    outfile: str = client.export_csv(results=results, path=export)
+                    console.log(f"{results_length} results exported to {outfile}")
+
+                console.print(table)
+            else:
+                console.log(
+                    f"[bold][yellow]✘[/yellow]No results found for {query}.[/bold]"
                 )
 
-            if export:
-                outfile: str = client.export_csv(results=results, path=export)
-                log.info(f"{results_length} results exported to {outfile}")
-
-            console.print(table)
-        else:
-            log.warning(f"[bold]No results found for {query}.[/bold]")
-
     except KeyboardInterrupt:
-        log.warning("\n[bold]User interruption detected[/bold]")
+        console.log("\n[bold][red]✘[/red] User interruption detected[/bold]")
 
     except Exception as e:
-        console.log(f"[bold red]{e}[/bold red]")
+        console.log(f"[bold] An error occurred:  [red]{e}[/red][/bold]")
     finally:
         elapsed: float = time.time() - now
-        log.info(f"[bold]Finished in {elapsed:.2f} seconds.[/]")
+        console.log(f"[bold][green]✔[/green] Finished in {elapsed:.2f} seconds.[/bold]")

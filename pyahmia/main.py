@@ -1,4 +1,3 @@
-import logging
 import typing as t
 from pathlib import Path
 from types import SimpleNamespace
@@ -9,20 +8,11 @@ from bs4 import BeautifulSoup, ResultSet
 from requests import Response
 from requests_tor import RequestsTor
 from rich.console import Console
-from rich.logging import RichHandler
 from update_checker import UpdateChecker, UpdateResult
 
 __all__ = ["Ahmia", "console"]
 
-console = Console()
-
-
-logging.basicConfig(
-    level="INFO",
-    format="%(message)s",
-    handlers=[RichHandler(markup=True, show_level=False, show_time=False)],
-)
-log: logging.Logger = logging.getLogger(__name__)
+console = Console(log_time=False)
 
 
 class Ahmia:
