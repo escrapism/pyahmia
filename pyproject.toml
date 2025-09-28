@@ -22,7 +22,7 @@ repository = "https://github.com/escrapism/pyahmia"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-requests = "^2.32.4"
+requests-tor = "^1.4"
 BeautifulSoup4 = "^4.13.4"
 rich-click = "^1.8.9"
 
