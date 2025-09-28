@@ -5,7 +5,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import requests
-from bs4 import BeautifulSoup, ResultSet
+from bs4 import BeautifulSoup, ResultSet, PageElement
 from requests import Response
 from requests.exceptions import RequestException
 from requests_tor import RequestsTor
@@ -15,6 +15,8 @@ from update_checker import UpdateChecker, UpdateResult
 
 console = Console(log_time=False)
 
+TIME_PERIODS = t.Literal["day", "week", "month", "all"]
+
 
 class Ahmia:
 
@@ -23,12 +25,12 @@ class Ahmia:
         self.use_tor = use_tor
 
         if use_tor:
-            self._search_url: str = (
+            self.base_url: str = (
                 "http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/search/?q=%s"
             )
             self.session = RequestsTor(tor_ports=(9050,), tor_cport=(9051,))
         else:
-            self._search_url: str = "https://ahmia.fi/search/?q=%s"
+            self.base_url: str = "https://ahmia.fi/search/?q=%s"
             self.session = requests.Session()
 
     @staticmethod
@@ -71,13 +73,22 @@ class Ahmia:
 
         return str(out)
 
-    def search(self, query: str, limit: int = 20) -> tuple[list[SimpleNamespace], int]:
-        soup: BeautifulSoup = self._get_page_source(url=self._search_url % query)
+    def search(
+        self,
+        query: str,
+        time_period: TIME_PERIODS = "all",
+    ) -> tuple[list[SimpleNamespace], str, int]:
+        soup: BeautifulSoup = self._get_page_source(
+            query=query, time_period=time_period
+        )
+        summary_tag: PageElement = soup.find("div", {"class": "resultsSubheader"})
+        summary: t.Union[t.LiteralString, str] = " ".join(summary_tag.text.split())
+
         items: ResultSet = soup.find_all("li", {"class": "result"})
-        total_count = len(items)
+        total_count: int = len(items)
 
         results: list[SimpleNamespace] = []
-        for item in items[:limit]:
+        for item in items:
             last_seen_tag = item.find("span", {"class": "lastSeen"})
             last_seen_text = (
                 last_seen_tag.get_text(strip=True) if last_seen_tag else "NaN"
@@ -98,11 +109,22 @@ class Ahmia:
                 )
             )
 
-        return results, total_count
+        return results, summary, total_count
 
-    def _get_page_source(self, url: str) -> BeautifulSoup:
+    def _get_page_source(self, query: str, time_period: TIME_PERIODS) -> BeautifulSoup:
+        params: dict = {"q": query}
+
+        period_to_days: dict = {
+            "day": "1",
+            "week": "7",
+            "month": "30",
+        }
+
+        if time_period in period_to_days:
+            params["d"] = period_to_days[time_period]
+
         response: Response = self.session.get(
-            url=url, headers={"User-Agent": self.user_agent}
+            url=self.base_url, params=params, headers={"User-Agent": self.user_agent}
         )
         soup: BeautifulSoup = BeautifulSoup(response.content, "html.parser")
         return soup

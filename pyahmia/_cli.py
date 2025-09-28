@@ -1,4 +1,5 @@
 import time
+import typing as t
 
 import rich_click as click
 from rich.console import Group
@@ -13,20 +14,28 @@ from ._api import Ahmia, console
 @click.command()
 @click.argument("query", type=str)
 @click.option(
+    "-T", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
+)
+@click.option(
     "-e",
     "--export",
     is_flag=True,
     help="Export the output to a file",
 )
 @click.option(
-    "-l",
-    "--limit",
-    default=20,
+    "-p",
+    "--period",
+    type=click.Choice(["day", "week", "month", "all"], case_sensitive=False),
+    default="all",
     show_default=True,
-    help="Maximum number of results to show",
+    help="Show results from a specified time period",
 )
-@click.option("--use-tor", is_flag=True, help="Route traffic through the Tor network")
-def cli(query: str, limit: int, use_tor: bool, export: bool):
+def cli(
+    query: str,
+    use_tor: bool,
+    export: bool,
+    period: t.Literal["day", "week", "month", "all"],
+):
     """
     Search hidden services on the Tor network.
     """
@@ -54,14 +63,17 @@ def cli(query: str, limit: int, use_tor: bool, export: bool):
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
             )
 
-            results, total_results = client.search(query=query, limit=limit)
+            results, search_summary, total_results = client.search(
+                query=query, time_period=period
+            )
             results_length = len(results)
 
             if total_results > 0:
-                console.log(
-                    f"[bold][#c7ff70]✔[/] Showing {results_length} of {total_results} results for [#c7ff70]{query}[/][/bold]"
-                )
+                console.log(f"[bold][#c7ff70]✔[/] {search_summary}[/bold]")
                 for index, result in enumerate(results, start=1):
+                    status.update(
+                        f"[bold]Loading {index} of {total_results} items[/bold]"
+                    )
                     content_items = [
                         f"[bold][#c7ff70]{result.title}[/][/bold]",
                         Rule(style="#444444"),
@@ -73,12 +85,16 @@ def cli(query: str, limit: int, use_tor: bool, export: bool):
                             Group(*content_items),
                             highlight=True,
                             border_style="dim",
+                            title_align="left",
+                            title=f"#{index}",
                         )
                     )
 
                 if export:
                     outfile: str = client.export_csv(results=results, path=query)
-                    console.log(f"{results_length} results exported to {outfile}")
+                    console.log(
+                        f"[bold][#c7ff70]🖫[/] {results_length} results exported: [link file://{outfile}]{outfile}[/bold]"
+                    )
 
             else:
                 console.log(

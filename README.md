@@ -33,7 +33,9 @@ ahmia QUERY
 
 PyAhmia only supports exporting data to csv files (for now), and in order to export, you'll need to specify the
 `-e, --export` flag.
-This will export your search results to a file named after your search query. E.g.,:
+This will export your search results to a file named after your search query.
+
+E.g.,:
 
 ```commandline
 ahmia QUERY --export
@@ -46,25 +48,24 @@ clearnet variant.
 
 To enable routing through Tor, you can call `ahmia` with the `--use-tor` flag.
 This assumes the tor service is running in the background, otherwise, the command will fail before you can say "hidden
-wiki". E.g.,:
+wiki".
+
+E.g.,:
 
 ```commandline
 ahmia QUERY --use-tor
 ```
 
-### Limiting output
+## Filtering results by time period
 
-By default, pyahmia prints 20 results, but will also show the total amount of results that
-were found for the specified query. You can change this by using the `-l, --limit` option and pass a number for how many
-results you want to print. E.g.,:
+Results can be filtered by 3 time periods (day, week, month). By default, results will be taken from all time periods (
+all). You can change this by using the `-p, --period` option, and pass the time period you want to get results from.
+
+E.g.,:
 
 ```commandline
-ahmia QUERY --limit 50
+ahmia QUERY --period week
 ```
-
-> [!Note]
-> If the total number of results found is equal to the specified limit or more than that, then you'll see exactly that
-> many.
 
 ## In conclusion
 
