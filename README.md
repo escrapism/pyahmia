@@ -2,7 +2,7 @@
 that match with a specified query, it works as a command-line interface tool and provides an easier way to export output
 to a csv file.
 
-![example](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/example.gif)
+<img src="https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/example.gif"  width=900 height=700>
 
 ## Features
 
