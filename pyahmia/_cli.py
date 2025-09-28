@@ -2,12 +2,10 @@ import time
 from contextlib import suppress
 
 import rich_click as click
-from rich import box
 from rich.console import Group
 from rich.panel import Panel
 from rich.rule import Rule
 from rich.status import Status
-from rich.table import Table
 
 from . import __pkg__, __version__
 from ._api import Ahmia, console
@@ -19,7 +17,7 @@ from ._api import Ahmia, console
     "-e",
     "--export",
     is_flag=True,
-    help="Export the output to a given filename",
+    help="Export the output to a file",
 )
 @click.option(
     "-l",
@@ -28,10 +26,10 @@ from ._api import Ahmia, console
     show_default=True,
     help="Maximum number of results to show",
 )
-@click.option("--use-tor", is_flag=True, help="Connect to the Tor network")
+@click.option("--use-tor", is_flag=True, help="Route traffic through the Tor network")
 def cli(query: str, limit: int, use_tor: bool, export: bool):
     """
-    Search Ahmia for hidden services matching QUERY.
+    Search hidden services on the Tor network.
     """
 
     console.set_window_title(f"{__pkg__}, {__version__}")
@@ -40,18 +38,6 @@ def cli(query: str, limit: int, use_tor: bool, export: bool):
         user_agent=f"{__pkg__}-cli/{__version__}; +https://pypi.org/project/{__pkg__}",
         use_tor=use_tor,
     )
-
-    table = Table(
-        box=box.SIMPLE,
-        highlight=True,
-        header_style="bold",
-        border_style="dim",
-    )
-    table.add_column("#", style="bold")
-    table.add_column("title")
-    table.add_column("about")
-    table.add_column("url", style="blue", no_wrap=True)
-    table.add_column("last seen")
 
     now: float = time.time()
     try:
