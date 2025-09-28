@@ -36,8 +36,8 @@ class Ahmia:
         check: t.Union[UpdateResult, None] = checker.check(
             package_name=__pkg__, package_version=__version__
         )
-        if check:
-            console.print(check)
+        if check is not None:
+            console.print(f"[bold][blue]🡅[/blue] {check}[/bold]")
 
     @staticmethod
     def export_csv(results: t.Iterable[SimpleNamespace], path: str) -> str:
