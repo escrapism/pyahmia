@@ -1,13 +1,16 @@
 import csv
 import typing as t
+from contextlib import suppress
 from pathlib import Path
 from types import SimpleNamespace
 
 import requests
 from bs4 import BeautifulSoup, ResultSet
 from requests import Response
+from requests.exceptions import RequestException
 from requests_tor import RequestsTor
 from rich.console import Console
+from rich.status import Status
 from update_checker import UpdateChecker, UpdateResult
 
 console = Console(log_time=False)
@@ -29,15 +32,20 @@ class Ahmia:
             self.session = requests.Session()
 
     @staticmethod
-    def check_updates():
+    def check_updates(status: Status):
         from . import __pkg__, __version__
 
-        checker = UpdateChecker()
-        check: t.Union[UpdateResult, None] = checker.check(
-            package_name=__pkg__, package_version=__version__
-        )
-        if check is not None:
-            console.print(f"[bold][blue]🡅[/blue] {check}[/bold]")
+        with suppress(RequestException):
+            if isinstance(status, Status):
+                status.update("[bold]Checking for update[yellow]...[/bold][/yellow]")
+
+            checker = UpdateChecker()
+            check: t.Union[UpdateResult, None] = checker.check(
+                package_name=__pkg__, package_version=__version__
+            )
+
+            if check is not None:
+                console.print(f"[bold][blue]🡅[/blue] {check}[/bold]")
 
     @staticmethod
     def export_csv(results: t.Iterable[SimpleNamespace], path: str) -> str:

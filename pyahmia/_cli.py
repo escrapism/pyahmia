@@ -1,5 +1,4 @@
 import time
-from contextlib import suppress
 
 import rich_click as click
 from rich.console import Group
@@ -41,20 +40,15 @@ def cli(query: str, limit: int, use_tor: bool, export: bool):
 
     now: float = time.time()
     try:
-
-        with Status(
-            "[bold]Checking for update[yellow]...[/bold][/yellow]", console=console
-        ) as status:
-            with suppress(Exception):
-                client.check_updates()
-
+        with Status("Initialising...", console=console) as status:
+            client.check_updates(status=status)
             if use_tor:
                 console.log(
-                    "[bold][#c7ff70]✔ Routing traffic through Tor[/][/bold]",
+                    f"[bold][#c7ff70]🖒 Routing traffic through Tor[/][/bold]",
                 )
             else:
                 console.log(
-                    "[bold yellow]✔ Routing traffic through the clearnet[/bold yellow]"
+                    f"[bold yellow]🖓 Routing traffic through the clearnet[/bold yellow]"
                 )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
