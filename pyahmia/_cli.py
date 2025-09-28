@@ -54,7 +54,7 @@ def cli(query: str, limit: int, use_tor: bool, export: bool):
                 )
             else:
                 console.log(
-                    "[bold yellow]✘ Routing traffic through the clearnet[/bold yellow]"
+                    "[bold yellow]✔ Routing traffic through the clearnet[/bold yellow]"
                 )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
