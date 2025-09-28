@@ -1,6 +1,6 @@
 [project]
 name = "pyahmia"
-version = "0.1.1"
+version = "0.1.2"
 description = "Search hidden services on the Tor network."
 authors = [
     { name = "Escrapism", email = "escrapism@duck.com" }
@@ -23,6 +23,7 @@ repository = "https://github.com/escrapism/pyahmia"
 [tool.poetry.dependencies]
 python = "^3.11"
 requests-tor = "^1.4"
+update-checker = "^0.18.0"
 BeautifulSoup4 = "^4.13.4"
 rich-click = "^1.8.9"
 

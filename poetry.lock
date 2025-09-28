@@ -481,6 +481,26 @@ files = [
 ]
 
 [[package]]
+name = "update-checker"
+version = "0.18.0"
+description = "A python module that will check for package updates."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "update_checker-0.18.0-py3-none-any.whl", hash = "sha256:cbba64760a36fe2640d80d85306e8fe82b6816659190993b7bdabadee4d4bbfd"},
+    {file = "update_checker-0.18.0.tar.gz", hash = "sha256:6a2d45bb4ac585884a6b03f9eade9161cedd9e8111545141e9aa9058932acb13"},
+]
+
+[package.dependencies]
+requests = ">=2.3.0"
+
+[package.extras]
+dev = ["black", "flake8", "pytest (>=2.7.3)"]
+lint = ["black", "flake8"]
+test = ["pytest (>=2.7.3)"]
+
+[[package]]
 name = "urllib3"
 version = "2.5.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -501,4 +521,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "f57ea2e3e703263afb5cbfa0ce47a23c608ee442bb4407dbb9949c8550a2f87e"
+content-hash = "1f0c918bb0e9c6665034f427bf357333094c80bcc807ce5ffae8f6a134c3825b"
