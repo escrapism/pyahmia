@@ -90,7 +90,7 @@ def cli(
                         Panel(
                             Group(*content_items),
                             highlight=True,
-                            border_style="dim",
+                            border_style="#c7ff70",
                             title_align="left",
                             title=f"#{index}",
                         )
