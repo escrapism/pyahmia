@@ -1,6 +1,6 @@
 [project]
 name = "pyahmia"
-version = "0.6.0"
+version = "0.6.1"
 description = "Search hidden services on the Tor network."
 authors = [
     { name = "Escrapism", email = "escrapism@duck.com" }
