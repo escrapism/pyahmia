@@ -49,31 +49,37 @@ def cli(
 
     now: float = time.time()
     try:
-        with Status("Initialising...", console=console) as status:
+        console.print(
+            f"""[bold][#c7ff70]
+ ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
+▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
+▐▛▀▜▌▐▛▀▚▖█   █ █      
+▐▌ ▐▌▐▌ ▐▌      █.fi [/][/] {__version__}
+        """
+        )
+        with Status(
+            "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
+        ) as status:
             client.check_updates(status=status)
             if use_tor:
                 console.log(
-                    f"[bold][#c7ff70]🗹[/] Routing traffic through Tor[/bold]",
+                    f"[bold][#c7ff70]🗹 Routing traffic through Tor[/][/bold]",
                 )
             else:
+
                 console.log(
-                    f"[bold][yellow]⚠[/yellow] Routing traffic through the clearnet[/bold]"
+                    f"[bold][yellow]⚠ Routing traffic through the clearnet[/yellow][/bold]"
                 )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
             )
 
-            results, search_summary, total_results = client.search(
-                query=query, time_period=period
-            )
-            results_length = len(results)
+            search = client.search(query=query, time_period=period)
 
-            if total_results > 0:
-                console.log(f"[bold][#c7ff70]✔[/] {search_summary}[/bold]")
+            if search.total_count > 0:
+                results = search.results
+                console.log(f"[bold][#c7ff70]✔[/] {search.summary}[/bold]")
                 for index, result in enumerate(results, start=1):
-                    status.update(
-                        f"[bold]Loading {index} of {total_results} items[/bold]"
-                    )
                     content_items = [
                         f"[bold][#c7ff70]{result.title}[/][/bold]",
                         Rule(style="#444444"),
@@ -93,7 +99,7 @@ def cli(
                 if export:
                     outfile: str = client.export_csv(results=results, path=query)
                     console.log(
-                        f"[bold][#c7ff70]🖫[/] {results_length} results exported: [link file://{outfile}]{outfile}[/bold]"
+                        f"[bold][#c7ff70]🖫[/] {search.total_count} results exported: [link file://{outfile}]{outfile}[/bold]"
                     )
 
             else:

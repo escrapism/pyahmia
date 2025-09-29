@@ -56,7 +56,7 @@ E.g.,:
 ahmia QUERY --use-tor
 ```
 
-## Filtering results by time period
+### Filtering results by time period
 
 Results can be filtered by 3 time periods (day, week, month). By default, results will be taken from all time periods (
 all). You can change this by using the `-p, --period` option, and pass the time period you want to get results from.

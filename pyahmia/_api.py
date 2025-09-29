@@ -35,11 +35,16 @@ class Ahmia:
 
     @staticmethod
     def check_updates(status: Status):
+        """
+        Checks for program (pyahmia) updates.
+
+        :param status: A rich.status.Status object to show a live status message.
+        """
         from . import __pkg__, __version__
 
         with suppress(RequestException):
             if isinstance(status, Status):
-                status.update("[bold]Checking for update[yellow]...[/bold][/yellow]")
+                status.update("[bold]Checking for updates[/bold][yellow]...[/yellow]")
 
             checker = UpdateChecker()
             check: t.Union[UpdateResult, None] = checker.check(
@@ -51,6 +56,14 @@ class Ahmia:
 
     @staticmethod
     def export_csv(results: t.Iterable[SimpleNamespace], path: str) -> str:
+        """
+        Exports search results to a csv file.
+
+        :param results: A list of SimpleNamespace objects, each representing a search result.
+        :param path: A path name/filename to which the results will be exported.
+        :return: The pathname to the exported results file.
+        """
+
         results_list = list(results)
 
         if not all(isinstance(item, SimpleNamespace) for item in results_list):
@@ -77,7 +90,17 @@ class Ahmia:
         self,
         query: str,
         time_period: TIME_PERIODS = "all",
-    ) -> tuple[list[SimpleNamespace], str, int]:
+    ) -> SimpleNamespace:
+        """
+        Search Ahmia.fi for hidden services on the Tor network, that match with the `query`.
+
+        :param query: Search query.
+        :param time_period: Time period to get results from
+          (expects either: `day`, `week`, `month`, and/or `all`)
+        :return: A SimpleNamespace containing the search summary, total results count,
+        and a list of SimpleNamespace objects, each containing info on an individual search result.
+        """
+
         soup: BeautifulSoup = self._get_page_source(
             query=query, time_period=time_period
         )
@@ -87,7 +110,8 @@ class Ahmia:
         items: ResultSet = soup.find_all("li", {"class": "result"})
         total_count: int = len(items)
 
-        results: list[SimpleNamespace] = []
+        results: list[dict] = []
+
         for item in items:
             last_seen_tag = item.find("span", {"class": "lastSeen"})
             last_seen_text = (
@@ -98,20 +122,47 @@ class Ahmia:
             )
 
             results.append(
-                SimpleNamespace(
-                    **{
-                        "title": " ".join(item.find("h4").text.split()),
-                        "about": " ".join(item.find("p").text.split()),
-                        "url": " ".join(item.find("cite").text.split()),
-                        "last_seen_rel": last_seen_text.replace("\xa0", " "),
-                        "last_seen_ts": last_seen_timestamp,
-                    }
-                )
+                {
+                    "title": " ".join(item.find("h4").text.split()),
+                    "about": " ".join(item.find("p").text.split()),
+                    "url": " ".join(item.find("cite").text.split()),
+                    "last_seen_rel": last_seen_text.replace("\xa0", " "),
+                    "last_seen_ts": last_seen_timestamp,
+                }
             )
 
-        return results, summary, total_count
+        return self._dict_to_namespace(
+            obj={"summary": summary, "total_count": total_count, "results": results}
+        )
 
-    def _get_page_source(self, query: str, time_period: TIME_PERIODS) -> BeautifulSoup:
+    def _dict_to_namespace(
+        self, obj: t.Union[t.Dict, t.List[t.Dict], t.Any]
+    ) -> t.Union[SimpleNamespace, t.List[SimpleNamespace], t.Any]:
+        """
+        Converts a dict or list of dicts to a/list of SimpleNamespace objects.
+
+        :param obj: A dict or list of dicts to be converted.
+        :return: A SimpleNamespace object or a list of those.
+        """
+        if isinstance(obj, dict):
+            return SimpleNamespace(
+                **{key: self._dict_to_namespace(value) for key, value in obj.items()}
+            )
+        elif isinstance(obj, list):
+            return [self._dict_to_namespace(obj=item) for item in obj]
+        else:
+            return obj
+
+    def _get_page_source(self, **kwargs) -> BeautifulSoup:
+        """
+        Parses a web response's HTML into a BeautifulSoup object.
+
+        :return: A BeautifulSoup object with parsed HTML markup.
+        """
+
+        query: str = kwargs.get("query")
+        time_period: TIME_PERIODS = kwargs.get("time_period")
+
         params: dict = {"q": query}
 
         period_to_days: dict = {
