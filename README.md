@@ -19,10 +19,10 @@
 
 ## Features
 
-- Search Ahmia.fi from the command line
-- Export results to CSV
-- Route requests through Tor
-- Limit or expand result count
+- [x] Search Ahmia.fi from the command line
+- [x] Export results to CSV
+- [x] Enable/Disable routing requests through Tor
+- [x] Return results in a clean readable format
 
 ## Installation
 
@@ -36,7 +36,9 @@ This will install `ahmia` and `pyahmia` as commands.
 
 ## Usage
 
-To start searching, you can call `ahmia` (or `pyahmia`) with the specified search query:
+To start searching, you can call `ahmia` (or `pyahmia`) with the specified search query.
+
+*example*:
 
 ```commandline
 ahmia QUERY
@@ -48,7 +50,7 @@ PyAhmia only supports exporting data to csv files (for now), and in order to exp
 `-e, --export` flag.
 This will export your search results to a file named after your search query.
 
-E.g.,:
+*example*:
 
 ```commandline
 ahmia QUERY --export
@@ -63,7 +65,7 @@ To enable routing through Tor, you can call `ahmia` with the `--use-tor` flag.
 This assumes the tor service is running in the background, otherwise, the command will fail before you can say "hidden
 wiki".
 
-E.g.,:
+*example*:
 
 ```commandline
 ahmia QUERY --use-tor
@@ -74,7 +76,7 @@ ahmia QUERY --use-tor
 Results can be filtered by 3 time periods (day, week, month). By default, results will be taken from all time periods (
 all). You can change this by using the `-p, --period` option, and pass the time period you want to get results from.
 
-E.g.,:
+*example*:
 
 ```commandline
 ahmia QUERY --period week
@@ -89,10 +91,10 @@ Don't send too many requests with pyahmia. Be nice to the owners of Ahmia.fi :)
 Contributions are welcome!
 If you’d like to improve PyAhmia, fix a bug, or add a feature:
 
-* Fork the repository
-* Create a new branch for your changes
-* Commit and push your changes
-* Open a pull request
+1. Fork the repository
+2. Create a new branch for your changes
+3. Commit and push your changes
+4. Open a pull request
 
 Please keep PRs focused and provide a clear description of the problem being solved. Bug reports and feature requests
 are also appreciated, just open an issue.
