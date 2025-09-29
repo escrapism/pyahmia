@@ -1,8 +1,21 @@
-**PyAhmia** uses Ahmia.fi to search for hidden services on the Tor network
-that match with a specified query, it works as a command-line interface tool and provides an easier way to export output
-to a csv file.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/ahmia.png">
+</p>
 
-![example](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/example.gif)
+<p align="center">
+  <strong>PyAhmia</strong> uses Ahmia.fi to search for hidden services on the Tor network
+  that match with a specified query, it works as a command-line interface tool and provides an easier way to export output
+  to a csv file.
+</p>
+
+<p align="center"
+<img src="https://img.shields.io/pypi/v/pyahmia">
+<img src="https://img.shields.io/pepy/dt/pyahmia">
+<img src="https://img.shields.io/github/languages/code-size/escrapism/pyahmia">
+<img src="https://img.shields.io/github/release-date/escrapism/pyahmia">
+<img src="https://img.shields.io/github/actions/workflow/status/escrapism/pyahmia/python-publish.yml">
+<img src="https://img.shields.io/github/license/escrapism/pyahmia">
+</p>
 
 ## Features
 
