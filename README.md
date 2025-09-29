@@ -1,21 +1,15 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/ahmia.png">
-</p>
+![PyAhmia Logo](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/ahmia.png)
 
-<p align="center">
-  <strong>PyAhmia</strong> uses Ahmia.fi to search for hidden services on the Tor network
-  that match with a specified query, it works as a command-line interface tool and provides an easier way to export output
-  to a csv file.
-</p>
+**PyAhmia** uses Ahmia.fi to search for hidden services on the Tor network  
+that match with a specified query. It works as a command-line interface tool  
+and provides an easier way to export output to a CSV file.
 
-<p align="center"
-<img src="https://img.shields.io/pypi/v/pyahmia">
-<img src="https://img.shields.io/pepy/dt/pyahmia">
-<img src="https://img.shields.io/github/languages/code-size/escrapism/pyahmia">
-<img src="https://img.shields.io/github/release-date/escrapism/pyahmia">
-<img src="https://img.shields.io/github/actions/workflow/status/escrapism/pyahmia/python-publish.yml">
-<img src="https://img.shields.io/github/license/escrapism/pyahmia">
-</p>
+![PyPI - Version](https://img.shields.io/pypi/v/pyahmia)
+![PyPI - Downloads](https://img.shields.io/pepy/dt/pyahmia)
+![Code Size](https://img.shields.io/github/languages/code-size/escrapism/pyahmia)
+![Release Date](https://img.shields.io/github/release-date/escrapism/pyahmia)
+![Build Status](https://img.shields.io/github/actions/workflow/status/escrapism/pyahmia/python-publish.yml)
+![License](https://img.shields.io/github/license/escrapism/pyahmia)
 
 ## Features
 
