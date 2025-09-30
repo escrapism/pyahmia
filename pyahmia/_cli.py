@@ -30,6 +30,7 @@ from ._api import Ahmia, console
     show_default=True,
     help="Show results from a specified time period",
 )
+@click.version_option(__version__, "-v", "--version", prog_name=__pkg__)
 def cli(
     query: str,
     use_tor: bool,
