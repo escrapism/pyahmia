@@ -49,7 +49,7 @@ def cli(
  ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
 ▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
-▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}
+▐▌ ▐▌▐▌ ▐▌      █[/bold]{"[blink].onion[/blink]" if use_tor else ".fi"}[/] {__version__}
 """
         )
 
