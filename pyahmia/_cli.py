@@ -14,7 +14,7 @@ from ._api import Ahmia, console
 @click.command()
 @click.argument("query", type=str)
 @click.option(
-    "-T", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
+    "-t", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
 )
 @click.option(
     "-e",
@@ -30,6 +30,7 @@ from ._api import Ahmia, console
     show_default=True,
     help="Show results from a specified time period",
 )
+@click.version_option(__version__, "-v", "--version", prog_name=__pkg__)
 def cli(
     query: str,
     use_tor: bool,
@@ -41,12 +42,6 @@ def cli(
     """
 
     console.set_window_title(f"{__pkg__}, {__version__}")
-
-    client = Ahmia(
-        user_agent=f"{__pkg__}-cli/{__version__}; +https://pypi.org/project/{__pkg__}",
-        use_tor=use_tor,
-    )
-
     now: float = time.time()
     try:
         console.print(
@@ -54,22 +49,18 @@ def cli(
  ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
 ▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
-▐▌ ▐▌▐▌ ▐▌      █.fi [/][/] {__version__}
-        """
+▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}"""
         )
+
+        client = Ahmia(
+            user_agent=f"{__pkg__}-cli/{__version__}; +https://github.com/escrapism/{__pkg__}",
+            use_tor=use_tor,
+        )
+
         with Status(
             "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
         ) as status:
             client.check_updates(status=status)
-            if use_tor:
-                console.log(
-                    f"[bold][#c7ff70]◉ Routing traffic through Tor[/][/bold]",
-                )
-            else:
-
-                console.log(
-                    f"[bold][yellow]◎ Routing traffic through the clearnet[/yellow][/bold]"
-                )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
             )
