@@ -63,12 +63,12 @@ def cli(
             client.check_updates(status=status)
             if use_tor:
                 console.log(
-                    f"[bold][#c7ff70]● Routing traffic through Tor[/][/bold]",
+                    f"[bold][#c7ff70]◉ Routing traffic through Tor[/][/bold]",
                 )
             else:
 
                 console.log(
-                    f"[bold][yellow]● Routing traffic through the clearnet[/yellow][/bold]"
+                    f"[bold][yellow]◎ Routing traffic through the clearnet[/yellow][/bold]"
                 )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
