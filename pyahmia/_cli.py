@@ -49,7 +49,8 @@ def cli(
  ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
 ▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
-▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}"""
+▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}
+"""
         )
 
         client = Ahmia(
@@ -98,8 +99,8 @@ def cli(
     except KeyboardInterrupt:
         console.log("\n[bold][red]✘[/red] User interruption detected[/bold]")
 
-    # except Exception as e:
-    #    console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
+    except Exception as e:
+        console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
     finally:
         elapsed: float = time.time() - now
         console.log(f"[bold][#c7ff70]✔[/] Finished in {elapsed:.2f} seconds.[/bold]")
