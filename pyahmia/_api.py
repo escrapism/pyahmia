@@ -104,11 +104,18 @@ class Ahmia:
         soup: BeautifulSoup = self._get_page_source(
             query=query, time_period=time_period
         )
-        summary_tag: PageElement = soup.find("div", {"class": "resultsSubheader"})
-        summary: t.Union[t.LiteralString, str] = " ".join(summary_tag.text.split())
 
         items: ResultSet = soup.find_all("li", {"class": "result"})
         total_count: int = len(items)
+
+        if not items:
+            return SimpleNamespace(
+                success=False,
+                message=f"[bold]Sorry, but PyAhmia couldn't find results for [#c7ff70]{query}.[/][/bold]",
+            )
+
+        message_tag: PageElement = soup.find("div", {"class": "resultsSubheader"})
+        message: t.Union[t.LiteralString, str] = " ".join(message_tag.text.split())
 
         results: list[dict] = []
 
@@ -132,7 +139,12 @@ class Ahmia:
             )
 
         return self._dict_to_namespace(
-            obj={"summary": summary, "total_count": total_count, "results": results}
+            obj={
+                "success": True,
+                "message": message,
+                "total_count": total_count,
+                "results": results,
+            }
         )
 
     def _dict_to_namespace(

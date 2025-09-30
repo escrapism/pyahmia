@@ -63,12 +63,12 @@ def cli(
             client.check_updates(status=status)
             if use_tor:
                 console.log(
-                    f"[bold][#c7ff70]🗹 Routing traffic through Tor[/][/bold]",
+                    f"[bold][#c7ff70]◉ Routing traffic through Tor[/][/bold]",
                 )
             else:
 
                 console.log(
-                    f"[bold][yellow]⚠ Routing traffic through the clearnet[/yellow][/bold]"
+                    f"[bold][yellow]◎ Routing traffic through the clearnet[/yellow][/bold]"
                 )
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
@@ -76,9 +76,9 @@ def cli(
 
             search = client.search(query=query, time_period=period)
 
-            if search.total_count > 0:
+            if search.success:
                 results = search.results
-                console.log(f"[bold][#c7ff70]✔[/] {search.summary}[/bold]")
+                console.log(f"[bold][#c7ff70]✔[/] {search.message}[/bold]")
                 for index, result in enumerate(results, start=1):
                     content_items = [
                         f"[bold][#c7ff70]{result.title}[/][/bold]",
@@ -101,17 +101,14 @@ def cli(
                     console.log(
                         f"[bold][#c7ff70]🖫[/] {search.total_count} results exported: [link file://{outfile}]{outfile}[/bold]"
                     )
-
             else:
-                console.log(
-                    f"[bold][yellow]✘[/yellow]No results found for {query}.[/bold]"
-                )
+                console.log(f"[bold][yellow]✘[/yellow] {search.message}[/bold]")
 
     except KeyboardInterrupt:
         console.log("\n[bold][red]✘[/red] User interruption detected[/bold]")
 
-    except Exception as e:
-        console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
+    # except Exception as e:
+    #    console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
     finally:
         elapsed: float = time.time() - now
         console.log(f"[bold][#c7ff70]✔[/] Finished in {elapsed:.2f} seconds.[/bold]")
