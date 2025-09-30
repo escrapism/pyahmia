@@ -45,11 +45,11 @@ def cli(
     now: float = time.time()
     try:
         console.print(
-            f"""[bold][#c7ff70]
+            f"""[bold]{"[red]" if use_tor else "[#c7ff70]"}
  ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
 ▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
-▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}
+▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}{"[/red]" if use_tor else "[/]"} {__version__}
 """
         )
 
@@ -100,7 +100,7 @@ def cli(
         console.log("\n[bold][red]✘[/red] User interruption detected[/bold]")
 
     except Exception as e:
-        console.log(f"[bold][red]✘[/red] An error occurred:  [red]{e}[/red][/bold]")
+        console.log(f"[bold][red]✘[/red] An error occurred:  {e}[/bold]")
     finally:
         elapsed: float = time.time() - now
         console.log(f"[bold][#c7ff70]✔[/] Finished in {elapsed:.2f} seconds.[/bold]")
