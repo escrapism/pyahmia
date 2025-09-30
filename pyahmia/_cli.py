@@ -54,7 +54,7 @@ def cli(
  ▗▄▖ ▐▌   ▄▄▄▄  ▄ ▗▞▀▜▌
 ▐▌ ▐▌▐▌   █ █ █ ▄ ▝▚▄▟▌
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
-▐▌ ▐▌▐▌ ▐▌      █.[/bold]{"onion" if use_tor else "fi"}[/] {__version__}"""
+▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}"""
         )
         with Status(
             "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
