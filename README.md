@@ -1,8 +1,7 @@
 ![PyAhmia Logo](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/ahmia.png)
 
 **PyAhmia** uses Ahmia.fi to search for hidden services on the Tor network  
-that match with a specified query. It works as a command-line interface tool  
-and provides an easier way to export output to a CSV file.
+that match with a specified query, without an explicit requirement for Tor.
 
 ![PyPI - Version](https://img.shields.io/pypi/v/pyahmia)
 ![PyPI - Downloads](https://img.shields.io/pepy/dt/pyahmia)
@@ -38,7 +37,27 @@ To start searching, you can call `ahmia` (or `pyahmia`) with the specified searc
 ahmia QUERY
 ```
 
-### Exporting output
+### Routing Traffic Through Tor (Optional)
+
+**PyAhmia works without Tor, but you can enable routing traffic through Tor if you want.**
+
+When this is enabled, it will use Ahmia's darknet url instead of the
+clearnet variant.
+
+To enable routing through Tor, you can call `ahmia` with the `-t, --use-tor` flag.
+This assumes the tor service is running in the background, otherwise, the command will fail before you can say "hidden
+wiki".
+
+If Tor is not installed, you can check out the installation scripts located
+in [pyahmia/scripts](https://github.com/escrapism/pyahmia/tree/master/scripts).
+
+*example*:
+
+```commandline
+ahmia QUERY --use-tor
+```
+
+### Exporting Output
 
 PyAhmia only supports exporting data to csv files (for now), and in order to export, you'll need to specify the
 `-e, --export` flag.
@@ -50,22 +69,7 @@ This will export your search results to a file named after your search query.
 ahmia QUERY --export
 ```
 
-### Routing through Tor
-
-PyAhmia supports routing traffic through Tor. When this is enabled, it will use Ahmia's darknet url instead of the
-clearnet variant.
-
-To enable routing through Tor, you can call `ahmia` with the `-t, --use-tor` flag.
-This assumes the tor service is running in the background, otherwise, the command will fail before you can say "hidden
-wiki".
-
-*example*:
-
-```commandline
-ahmia QUERY --use-tor
-```
-
-### Filtering results by time period
+### Filtering Results by Time Period
 
 Results can be filtered by 3 time periods (day, week, month). By default, results will be taken from all time periods (
 all). You can change this by using the `-p, --period` option, and pass the time period you want to get results from.
@@ -76,7 +80,7 @@ all). You can change this by using the `-p, --period` option, and pass the time 
 ahmia QUERY --period week
 ```
 
-## In conclusion
+## In Conclusion
 
 Don't send too many requests with pyahmia. Be nice to the owners of Ahmia.fi :)
 
