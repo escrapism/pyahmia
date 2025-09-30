@@ -14,7 +14,7 @@ from ._api import Ahmia, console
 @click.command()
 @click.argument("query", type=str)
 @click.option(
-    "-T", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
+    "-t", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
 )
 @click.option(
     "-e",
@@ -41,12 +41,6 @@ def cli(
     """
 
     console.set_window_title(f"{__pkg__}, {__version__}")
-
-    client = Ahmia(
-        user_agent=f"{__pkg__}-cli/{__version__}; +https://pypi.org/project/{__pkg__}",
-        use_tor=use_tor,
-    )
-
     now: float = time.time()
     try:
         console.print(
@@ -56,6 +50,12 @@ def cli(
 ▐▛▀▜▌▐▛▀▚▖█   █ █      
 ▐▌ ▐▌▐▌ ▐▌      █[/bold].{"onion" if use_tor else "fi"}[/] {__version__}"""
         )
+
+        client = Ahmia(
+            user_agent=f"{__pkg__}-cli/{__version__}; +https://github.com/escrapism/{__pkg__}",
+            use_tor=use_tor,
+        )
+
         with Status(
             "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
         ) as status:

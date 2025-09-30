@@ -55,7 +55,7 @@ ahmia QUERY --export
 PyAhmia supports routing traffic through Tor. When this is enabled, it will use Ahmia's darknet url instead of the
 clearnet variant.
 
-To enable routing through Tor, you can call `ahmia` with the `--use-tor` flag.
+To enable routing through Tor, you can call `ahmia` with the `-t, --use-tor` flag.
 This assumes the tor service is running in the background, otherwise, the command will fail before you can say "hidden
 wiki".
 
