@@ -84,7 +84,7 @@ def cli(
                             highlight=True,
                             border_style="dim #c7ff70",
                             title_align="left",
-                            title=f"#{index}",
+                            title=f"[{index}]",
                         )
                     )
 
