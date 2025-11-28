@@ -62,16 +62,26 @@ def cli(
             "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
         ) as status:
             client.check_updates(status=status)
+
+            # ----------------------------------------------------------------------- #
+            status.update(
+                f"[bold]Capturing session token. Please wait[yellow]...[/bold][/yellow]"
+            )
+            token = client.token()
+            # ----------------------------------------------------------------------- #
+
+            # ----------------------------------------------------------------------- #
             status.update(
                 f"[bold]Searching for [#c7ff70]{query}[/]. Please wait[yellow]...[/bold][/yellow]"
             )
-
-            search = client.search(query=query, time_period=period)
+            search = client.search(query=query, time_period=period, token=token)
+            # ----------------------------------------------------------------------- #
 
             if search.success:
                 results = search.results
                 console.log(f"[bold][#c7ff70]✔[/] {search.message}[/bold]")
                 for index, result in enumerate(results, start=1):
+                    # ----------------------------------------------------------------------- #
                     content_items = [
                         f"[bold][#c7ff70]{result.title}[/][/bold]",
                         Rule(style="#444444"),
@@ -84,9 +94,10 @@ def cli(
                             highlight=True,
                             border_style="dim #c7ff70",
                             title_align="left",
-                            title=f"#{index}",
+                            title=f"[{index}]",
                         )
                     )
+                    # ----------------------------------------------------------------------- #
 
                 if export:
                     outfile: str = client.export_csv(results=results, path=query)
