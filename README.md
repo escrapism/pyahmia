@@ -1,14 +1,14 @@
-![PyAhmia Logo](https://raw.githubusercontent.com/escrapism/pyahmia/refs/heads/master/img/ahmia.png)
+![PyAhmia Logo](https://raw.githubusercontent.com/rly0nheart/pyahmia/refs/heads/master/img/ahmia.png)
 
 **PyAhmia** uses Ahmia.fi to search for hidden services on the Tor network  
 that match with a specified query, without an explicit requirement for Tor.
 
 ![PyPI - Version](https://img.shields.io/pypi/v/pyahmia)
 ![PyPI - Downloads](https://img.shields.io/pepy/dt/pyahmia)
-![Code Size](https://img.shields.io/github/languages/code-size/escrapism/pyahmia)
-![Release Date](https://img.shields.io/github/release-date/escrapism/pyahmia)
-![Build Status](https://img.shields.io/github/actions/workflow/status/escrapism/pyahmia/python-publish.yml)
-![License](https://img.shields.io/github/license/escrapism/pyahmia)
+![Code Size](https://img.shields.io/github/languages/code-size/rly0nheart/pyahmia)
+![Release Date](https://img.shields.io/github/release-date/rly0nheart/pyahmia)
+![Build Status](https://img.shields.io/github/actions/workflow/status/rly0nheart/pyahmia/python-publish.yml)
+![License](https://img.shields.io/github/license/rly0nheart/pyahmia)
 
 ## Features
 
@@ -49,7 +49,7 @@ This assumes the tor service is running in the background, otherwise, the comman
 wiki".
 
 If Tor is not installed, you can check out the installation scripts located
-in [pyahmia/scripts](https://github.com/escrapism/pyahmia/tree/master/scripts).
+in [pyahmia/scripts](https://github.com/rly0nheart/pyahmia/tree/master/scripts).
 
 *example*:
 
@@ -100,8 +100,8 @@ are also appreciated, just open an issue.
 ## License
 
 This project is licensed under the MIT License, see
-the [LICENSE](https://github.com/escrapism/pyahmia/blob/master/LICENSE) file for details.
+the [LICENSE](https://github.com/rly0nheart/pyahmia/blob/master/LICENSE) file for details.
 
 
 > [!Note]
-> PyAhmia is not in any way affiliated with Ahmia.fi,
+> **PyAhmia is not in any way affiliated with Ahmia.fi**
