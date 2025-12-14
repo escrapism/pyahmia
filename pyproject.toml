@@ -1,9 +1,9 @@
 [project]
 name = "pyahmia"
-version = "0.7.3"
+version = "0.7.4"
 description = "Search hidden services on the Tor network."
 authors = [
-    { name = "Escrapism", email = "escrapism@duck.com" }
+    { name = "Escrapism", email = "escrapism@noneexistent.com" }
 ]
 license = "MIT"
 readme = "README.md"
@@ -17,8 +17,8 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-issues = "https://github.com/escrapism/pyahmia/issues"
-repository = "https://github.com/escrapism/pyahmia"
+issues = "https://codeberg.org/escrapism/pyahmia/issues"
+repository = "https://codeberg.org/escrapism/pyahmia"
 
 [tool.poetry.dependencies]
 python = "^3.11"
