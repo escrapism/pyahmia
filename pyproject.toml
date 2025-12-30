@@ -1,6 +1,6 @@
 [project]
 name = "pyahmia"
-version = "0.8.0"
+version = "0.8.1"
 description = "Search hidden services on the Tor network."
 license = "MIT"
 readme = "README.md"
@@ -28,6 +28,11 @@ repository = "https://codeberg.org/rly0nheart/pyahmia"
 [project.scripts]
 ahmia = "pyahmia.src._cli:cli"
 pyahmia = "pyahmia.src._cli:cli"
+
+[project.optional-dependencies]
+dev = [
+    "black>=25.12.0",
+]
 
 [build-system]
 requires = ["setuptools>=80.9.0"]

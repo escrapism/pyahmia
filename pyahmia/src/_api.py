@@ -11,9 +11,10 @@ from ._lib import console
 
 TIME_PERIODS = t.Literal["day", "week", "month", "all"]
 
+__all__ = ["Ahmia"]
+
 
 class Ahmia:
-
     def __init__(self, user_agent: str, use_tor: bool = False):
         self.user_agent = user_agent
         self.use_tor = use_tor
