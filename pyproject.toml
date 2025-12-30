@@ -1,36 +1,37 @@
 [project]
 name = "pyahmia"
-version = "0.7.4"
+version = "0.8.0"
 description = "Search hidden services on the Tor network."
-authors = [
-    { name = "Ritchie Mwewa", email = "rly0nheart@duck.com" }
-]
 license = "MIT"
 readme = "README.md"
+authors = [
+    { name = "Ritchie Mwewa", email = "hi@rly0nheart.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "requests-tor>=1.4",
+    "update-checker>=0.18.0",
+    "BeautifulSoup4>=4.13.4",
+    "rich-click>=1.8.9"
+]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Intended Audience :: End Users/Desktop",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English"
 ]
 
-[tool.poetry.urls]
+[project.urls]
 issues = "https://codeberg.org/rly0nheart/pyahmia/issues"
 repository = "https://codeberg.org/rly0nheart/pyahmia"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-requests-tor = "^1.4"
-update-checker = "^0.18.0"
-BeautifulSoup4 = "^4.13.4"
-rich-click = "^1.8.9"
-
-[tool.poetry.scripts]
-ahmia = "pyahmia._cli:cli"
-pyahmia = "pyahmia._cli:cli"
+[project.scripts]
+ahmia = "pyahmia.src._cli:cli"
+pyahmia = "pyahmia.src._cli:cli"
 
 [build-system]
-requires = ["poetry-core>=2.2.1,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["pyahmia", "pyahmia.src"]
