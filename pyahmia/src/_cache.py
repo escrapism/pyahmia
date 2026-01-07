@@ -128,16 +128,16 @@ class CacheManager:
 
         :return: Number of expired cache files deleted
         """
-        count = 0
-        current_time = time.time()
+        count: int = 0
+        current_time: float = time.time()
 
         if not self.cache_dir.exists():
             return count
 
         for cache_file in self.cache_dir.glob("*.json"):
             try:
-                with cache_file.open("r", encoding="utf-8") as f:
-                    cache_data = json.load(f)
+                with cache_file.open("r", encoding="utf-8") as file:
+                    cache_data = json.load(file)
 
                 if current_time > cache_data.get("expires_at", 0):
                     cache_file.unlink(missing_ok=True)
