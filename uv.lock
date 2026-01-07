@@ -244,6 +244,8 @@ version = "0.8.1"
 source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
+    { name = "black" },
+    { name = "requests" },
     { name = "requests-tor" },
     { name = "rich-click" },
     { name = "update-checker" },
@@ -257,7 +259,9 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.13.4" },
+    { name = "black", specifier = ">=25.12.0" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=25.12.0" },
+    { name = "requests", specifier = ">=2.32.5" },
     { name = "requests-tor", specifier = ">=1.4" },
     { name = "rich-click", specifier = ">=1.8.9" },
     { name = "update-checker", specifier = ">=0.18.0" },

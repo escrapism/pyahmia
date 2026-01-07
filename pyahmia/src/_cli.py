@@ -50,7 +50,7 @@ def cli(
         )
 
         with Status(
-            "[bold]Initialising[/bold][yellow]...[/yellow]", console=console
+            "[bold]Initialising[/bold][yellow]…[/yellow]", console=console
         ) as status:
             check_updates(status=status)
             search = ahmia.search(query=query, time_period=period, status=status)

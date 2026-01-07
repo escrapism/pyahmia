@@ -14,7 +14,13 @@ from . import __pkg__, __version__
 
 console = Console(log_time=False)
 
-__all__ = ["print_banner", "print_results", "check_updates", "export_csv", "console"]
+__all__ = [
+    "print_banner",
+    "print_results",
+    "check_updates",
+    "export_csv",
+    "console",
+]
 
 
 def print_banner(tor_mode: bool):
@@ -69,7 +75,7 @@ def check_updates(status: Status):
     """
     with suppress(RequestException):
         if isinstance(status, Status):
-            status.update("[bold]Checking for updates[/bold][yellow]...[/yellow]")
+            status.update("[bold]Checking for updates[/bold][yellow]…[/yellow]")
 
         checker = UpdateChecker()
         check = checker.check(package_name=__pkg__, package_version=__version__)

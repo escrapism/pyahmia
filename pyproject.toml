@@ -1,6 +1,6 @@
 [project]
 name = "pyahmia"
-version = "0.8.1"
+version = "0.9.0"
 description = "Search hidden services on the Tor network."
 license = "MIT"
 readme = "README.md"
