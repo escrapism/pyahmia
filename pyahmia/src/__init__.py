@@ -1,2 +1,4 @@
+from importlib.metadata import version
+
 __pkg__ = "pyahmia"
-__version__ = "0.9.0"
+__version__ = version(__pkg__)

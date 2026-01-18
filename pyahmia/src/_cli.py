@@ -1,7 +1,6 @@
+import argparse
 import time
-import typing as t
 
-import rich_click as click
 from rich.status import Status
 
 from . import __pkg__, __version__
@@ -9,55 +8,65 @@ from ._api import Ahmia
 from ._lib import console, check_updates, print_results, export_csv, print_banner
 
 
-@click.command()
-@click.argument("query", type=str)
-@click.option(
-    "-t", "--use-tor", is_flag=True, help="Route traffic through the Tor network"
-)
-@click.option(
-    "-e",
-    "--export",
-    is_flag=True,
-    help="Export the output to a file",
-)
-@click.option(
-    "-p",
-    "--period",
-    type=click.Choice(["day", "week", "month", "all"], case_sensitive=False),
-    default="all",
-    show_default=True,
-    help="Show results from a specified time period",
-)
-@click.version_option(__version__, "-v", "--version", prog_name=__pkg__)
-def cli(
-    query: str,
-    use_tor: bool,
-    export: bool,
-    period: t.Literal["day", "week", "month", "all"],
-):
+def cli():
     """
     Search hidden services on the Tor network.
     """
+    parser = argparse.ArgumentParser(
+        prog=__pkg__,
+        description="Search hidden services on the Tor network.",
+    )
+    parser.add_argument("query", type=str, help="Search query")
+    parser.add_argument(
+        "-t",
+        "--use-tor",
+        action="store_true",
+        help="Route traffic through the Tor network",
+    )
+    parser.add_argument(
+        "-e",
+        "--export",
+        action="store_true",
+        help="Export the output to a file",
+    )
+    parser.add_argument(
+        "-p",
+        "--period",
+        type=str,
+        choices=["day", "week", "month", "all"],
+        default="all",
+        help="Show results from a specified time period (default: all)",
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"{__pkg__} {__version__}, by Ritchie Mwewa",
+    )
+
+    args = parser.parse_args()
 
     console.set_window_title(f"{__pkg__}, {__version__}")
     now: float = time.time()
     try:
-        print_banner(tor_mode=use_tor)
+        print_banner(tor_mode=args.use_tor)
 
         ahmia = Ahmia(
             user_agent=f"{__pkg__}-cli/{__version__}; +https://github.com/escrapism/{__pkg__}",
-            use_tor=use_tor,
+            use_tor=args.use_tor,
         )
 
         with Status(
             "[bold]Initialising[/bold][yellow]…[/yellow]", console=console
         ) as status:
             check_updates(status=status)
-            search = ahmia.search(query=query, time_period=period, status=status)
+            search = ahmia.search(
+                query=args.query, time_period=args.period, status=status
+            )
             print_results(search=search)
 
-            if export:
-                outfile: str = export_csv(results=search["results"], path=query)
+            if args.export:
+                outfile: str = export_csv(results=search["results"], path=args.query)
                 console.log(
                     f"[bold][#c7ff70]🖫[/] {search['total_count']} results exported: [link file://{outfile}]{outfile}[/bold]"
                 )
